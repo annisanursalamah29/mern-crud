@@ -81,4 +81,4 @@ app.delete("/api/students/:id", async (req, res) => {
   }
 });
 
-module.exports = app;
+export default app;
