@@ -4,7 +4,7 @@ import StudentList from './components/StudentList';
 import StudentForm from './components/StudentForm';
 import './App.css';
 
-const API_URL = 'http://localhost:5000/api/students';
+const API_URL = "https://mern-crud-smoky-seven.vercel.app/api/students";
 
 function App() {
   const [students, setStudents] = useState([]);
