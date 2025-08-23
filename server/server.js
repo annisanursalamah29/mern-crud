@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-  origin: "https://annisanursalamah29.github.io/mern-crud/", // Ganti dengan URL GitHub Pages Anda
+  origin: "https://annisanursalamah29.github.io", // Ganti dengan URL GitHub Pages Anda
   methods: ["GET", "POST", "PUT", "DELETE"], // Metode HTTP yang diizinkan
   allowedHeaders: ["Content-Type", "Authorization"], // Header yang diizinkan
   credentials: true, // Izinkan kredensial (seperti cookies, jika digunakan)
