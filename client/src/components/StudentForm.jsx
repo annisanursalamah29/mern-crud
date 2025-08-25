@@ -21,7 +21,11 @@ const StudentForm = ({ onSubmit, initialData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    const dataToSend = {
+      ...formData,
+      nilai: Number(formData.nilai), // pastikan nilai bertipe number
+    };
+    onSubmit(dataToSend);
     setFormData({ nama: '', kelas: '', nilai: '' }); // Reset form
   };
 

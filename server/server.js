@@ -2,15 +2,30 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import Student from "./models/Student.js"; // Pastikan path ini benar
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import Student from "./models/Student.js";
 
 dotenv.config();
 
 const app = express();
 
+app.use(helmet());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(limiter);
+
 const corsOptions = {
-  origin: "https://annisanursalamah29.github.io",
-  optionsSuccessStatus: 200, // Untuk kompatibilitas browser lama
+  origin: [
+    "http://localhost:5173",
+    "https://annisanursalamah29.github.io/mern-crud",
+  ],
+  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 
@@ -24,12 +39,16 @@ mongoose
 
 // Endpoint CRUD
 app.post("/api/students", async (req, res) => {
+  const { nama, kelas, nilai } = req.body;
+  if (!nama || !kelas || typeof nilai !== "number") {
+    return res.status(400).json({ message: "Data tidak valid" });
+  }
   try {
-    const student = new Student(req.body);
+    const student = new Student({ nama, kelas, nilai });
     await student.save();
     res.status(201).json(student);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ message: "Terjadi kesalahan" });
   }
 });
 
@@ -56,14 +75,20 @@ app.get("/api/students/:id", async (req, res) => {
 
 // UPDATE: Mengubah data siswa
 app.put("/api/students/:id", async (req, res) => {
+  const { nama, kelas, nilai } = req.body;
+  if (!nama || !kelas || typeof nilai !== "number") {
+    return res.status(400).json({ message: "Data tidak valid" });
+  }
   try {
-    const student = await Student.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const student = await Student.findByIdAndUpdate(
+      req.params.id,
+      { nama, kelas, nilai },
+      { new: true }
+    );
     if (!student) return res.status(404).json({ message: "Student not found" });
     res.json(student);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ message: "Terjadi kesalahan" });
   }
 });
 
@@ -78,4 +103,7 @@ app.delete("/api/students/:id", async (req, res) => {
   }
 });
 
-export default app;
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
