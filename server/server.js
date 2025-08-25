@@ -23,6 +23,7 @@ app.use(limiter);
 const corsOptions = {
   origin: [
     "http://localhost:5173",
+    "https://annisanursalamah29.github.io",
     "https://annisanursalamah29.github.io/mern-crud",
   ],
   optionsSuccessStatus: 200,
